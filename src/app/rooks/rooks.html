@@ -1,0 +1,28 @@
+<div class="mode-toggle">
+  <label>
+    <input type="checkbox" [(ngModel)]="highlightPath" />
+    Highlight Path
+  </label>
+</div>
+<div class="chessboard">
+  <div *ngFor="let row of board; let rowIdx = index" class="row">
+    <div
+      *ngFor="let cell of row; let colIdx = index"
+      class="cell"
+      [class.white]="(rowIdx + colIdx) % 2 === 0"
+      [class.black]="(rowIdx + colIdx) % 2 === 1"
+      [class.rook]="cell === 1"
+      [class.threatened]="highlightPath && threatenedSquares[rowIdx][colIdx]"
+      (click)="placeRook(rowIdx, colIdx)"
+    >
+      <span *ngIf="cell === 1">&#9814;</span>
+    </div>
+  </div>
+</div>
+<div class="status">
+  Rooks placed: {{ rooksPlaced }} / 8
+  <button (click)="resetBoard()">Reset</button>
+</div>
+<div *ngIf="isSolved" class="success">
+  🎉 Puzzle solved! All 8 rooks placed correctly.
+</div>

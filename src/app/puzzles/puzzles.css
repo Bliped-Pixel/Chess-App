@@ -1,0 +1,44 @@
+.puzzles-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+.card-grid {
+  display: flex;
+  gap: 32px;
+}
+.puzzle-card {
+  background: #222;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  width: 220px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  perspective: 600px;
+}
+.puzzle-card:hover:not(.disabled) {
+  transform: rotateY(12deg) scale(1.05);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.28);
+}
+.puzzle-card.disabled {
+  background: #444;
+  color: #bbb;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.card-content {
+  text-align: center;
+}
+.card-content h2 {
+  margin-bottom: 12px;
+  font-size: 1.5em;
+}
+.card-content p {
+  font-size: 1em;
+}

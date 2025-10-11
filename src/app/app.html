@@ -1,0 +1,18 @@
+<div class="container">
+	<div class="navbar" [class.closed]="navbarClosed">
+		<button class="toggle-btn" (click)="navbarClosed = !navbarClosed">
+			{{ navbarClosed ? '☰' : '✖' }}
+		</button>
+		<div class="nav-content" *ngIf="!navbarClosed">
+			<h3>Navigation</h3>
+			<ul>
+				<li><a routerLink="/">Home</a></li>
+			<li><a routerLink="/puzzles">Puzzles</a></li>
+				<li><a routerLink="/settings">Settings</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main-content">
+		<router-outlet></router-outlet>
+	</div>
+</div>
