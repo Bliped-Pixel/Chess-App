@@ -11,18 +11,19 @@
       class="cell"
       [class.white]="(rowIdx + colIdx) % 2 === 0"
       [class.black]="(rowIdx + colIdx) % 2 === 1"
-      [class.knight]="cell === 1"
+      [class.king]="cell === 1"
       [class.threatened]="highlightPath && threatenedSquares[rowIdx][colIdx]"
-      (click)="placeKnight(rowIdx, colIdx)"
+      (click)="placeKing(rowIdx, colIdx)"
     >
-      <span *ngIf="cell === 1">&#9816;</span>
+        <span *ngIf="cell === 1">&#9812;</span>
+        <span *ngIf="highlightPath && threatenedSquares[rowIdx][colIdx] && cell !== 1" class="dot"></span>
     </div>
   </div>
 </div>
 <div class="status">
-  Knights placed: {{ knightsPlaced }} / 32
+  Kings placed: {{ kingsPlaced }} / 16
   <button (click)="resetBoard()">Reset</button>
 </div>
 <div *ngIf="isSolved" class="success">
-  🎉 Puzzle solved! All 32 knights placed correctly.
+  🎉 Puzzle solved! All 16 kings placed correctly.
 </div>

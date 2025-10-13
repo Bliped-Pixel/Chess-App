@@ -1,3 +1,8 @@
+.body, html {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 .container {
 	display: flex;
 	min-height: 100vh;
@@ -60,4 +65,16 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+.dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #333;
+	display: inline-block;
+	margin: auto;
+	position: relative;
+	top: 0;
+	left: 0;
 }

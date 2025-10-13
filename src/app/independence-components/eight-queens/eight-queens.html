@@ -11,18 +11,19 @@
       class="cell"
       [class.white]="(rowIdx + colIdx) % 2 === 0"
       [class.black]="(rowIdx + colIdx) % 2 === 1"
-      [class.rook]="cell === 1"
+      [class.queen]="cell === 1"
       [class.threatened]="highlightPath && threatenedSquares[rowIdx][colIdx]"
-      (click)="placeRook(rowIdx, colIdx)"
+      (click)="placeQueen(rowIdx, colIdx)"
     >
-      <span *ngIf="cell === 1">&#9814;</span>
+        <span *ngIf="cell === 1">♛</span>
+        <span *ngIf="highlightPath && threatenedSquares[rowIdx][colIdx] && cell !== 1" class="dot"></span>
     </div>
   </div>
 </div>
 <div class="status">
-  Rooks placed: {{ rooksPlaced }} / 8
+  Queens placed: {{ queensPlaced }} / 8
   <button (click)="resetBoard()">Reset</button>
 </div>
 <div *ngIf="isSolved" class="success">
-  🎉 Puzzle solved! All 8 rooks placed correctly.
+  🎉 Puzzle solved! All 8 queens placed correctly.
 </div>

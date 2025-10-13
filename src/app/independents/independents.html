@@ -16,6 +16,9 @@
       <label>
         <input type="radio" name="puzzleType" [(ngModel)]="selected" value="kings" /> Kings
       </label>
+      <label>
+        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="pawns" /> Pawns
+      </label>
     </div>
     <div class="puzzle-content">
   <app-eight-queens *ngIf="selected === 'queens'"></app-eight-queens>
@@ -23,6 +26,7 @@
   <app-knights *ngIf="selected === 'knights'"></app-knights>
   <app-rooks *ngIf="selected === 'rooks'"></app-rooks>
   <app-kings *ngIf="selected === 'kings'"></app-kings>
+  <app-pawns *ngIf="selected === 'pawns'"></app-pawns>
     </div>
   </div>
 </div>

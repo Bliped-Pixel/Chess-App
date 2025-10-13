@@ -1,3 +1,4 @@
+/* Eight Queens CSS */
 .container {
 	display: flex;
 	min-height: 100vh;
@@ -38,6 +39,17 @@
 .nav-content ul {
 	list-style: none;
 	padding: 0;
+}
+.dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #333;
+	display: inline-block;
+	margin: auto;
+	position: relative;
+	top: 0;
+	left: 0;
 }
 .nav-content li {
 	margin: 12px 0;

@@ -11,18 +11,19 @@
       class="cell"
       [class.white]="(rowIdx + colIdx) % 2 === 0"
       [class.black]="(rowIdx + colIdx) % 2 === 1"
-      [class.bishop]="cell === 1"
+      [class.pawn]="cell === 1"
       [class.threatened]="highlightPath && threatenedSquares[rowIdx][colIdx]"
-      (click)="placeBishop(rowIdx, colIdx)"
+      (click)="placePawn(rowIdx, colIdx)"
     >
-      <span *ngIf="cell === 1">&#9815;</span>
+  <span *ngIf="cell === 1">&#9817;</span>
+  <span *ngIf="highlightPath && threatenedSquares[rowIdx][colIdx] && cell !== 1" class="threat-dot"></span>
     </div>
   </div>
 </div>
 <div class="status">
-  Bishops placed: {{ bishopsPlaced }} / 14
+  Pawns placed: {{ pawnsPlaced }} / 32
   <button (click)="resetBoard()">Reset</button>
 </div>
 <div *ngIf="isSolved" class="success">
-  🎉 Puzzle solved! All 14 bishops placed correctly.
+  🎉 Puzzle solved! All 32 pawns placed correctly.
 </div>
