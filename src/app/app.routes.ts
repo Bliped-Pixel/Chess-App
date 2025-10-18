@@ -10,6 +10,10 @@ export const routes: Routes = [
         loadComponent: () => import('./independents/independents').then(m => m.Independents)
     },
     {
+        path: 'dominance',
+        loadComponent: () => import('./dominance/dominance').then(m => m.Dominance)
+    },
+    {
         path: '',
         redirectTo: 'puzzles',
         pathMatch: 'full'

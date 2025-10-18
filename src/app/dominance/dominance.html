@@ -1,0 +1,85 @@
+<div class="dominance-container">
+  <div class="game-header">
+    <h1>Game of Dominance</h1>
+    <p>Use the minimum number of pieces to dominate all squares on the board!</p>
+  </div>
+
+  <div class="size-controls">
+    <label>Board Size:</label>
+    <button *ngFor="let s of availableSizes" 
+            [class.active]="size === s"
+            (click)="changeSize(s)">
+      {{ s }}×{{ s }}
+    </button>
+  </div>
+
+  <div class="game-content">
+    <div class="left-panel">
+      <div class="piece-selector">
+        <h3>Select Piece</h3>
+        <div class="piece-buttons">
+          <button 
+            *ngFor="let piece of availablePieces" 
+            class="piece-btn" 
+            [class.selected]="selectedPiece === piece.type"
+            (click)="selectPiece(piece.type)">
+            <span class="piece-symbol">{{ piece.symbol }}</span>
+            <span class="piece-name">{{ piece.type }}</span>
+            <span class="piece-count">{{ pieceCounts[piece.type] }} / {{ getRequiredPieces(piece.type) }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="toggle-btn" [class.active]="highlightDominated" (click)="highlightDominated = !highlightDominated">
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Show Dominated</span>
+        </button>
+        <button class="reset-btn" (click)="resetBoard()">Reset Board</button>
+      </div>
+
+      <div class="stats-panel">
+        <h3>Domination Stats</h3>
+        <div class="stat-item">
+          <span class="stat-label">Total Pieces:</span>
+          <span class="stat-value">{{ getTotalPieces() }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Squares Dominated:</span>
+          <span class="stat-value">{{ dominationCount }} / {{ size * size }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Coverage:</span>
+          <span class="stat-value">{{ dominationPercentage }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="dominationPercentage"></div>
+        </div>
+      </div>
+
+      <div *ngIf="hasWon && isOptimal" class="victory optimal">
+        🎉 Perfect! Optimal solution achieved!
+      </div>
+      <div *ngIf="hasWon && !isOptimal" class="victory">
+        ✓ Board dominated! Try using fewer pieces.
+      </div>
+    </div>
+
+    <div class="board-container">
+      <div class="chessboard" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+        <div *ngFor="let row of board; let r = index" class="row">
+          <div *ngFor="let cell of row; let c = index"
+            class="cell"
+            [class.white]="(r + c) % 2 === 0"
+            [class.black]="(r + c) % 2 === 1"
+            [class.dominated]="highlightDominated && isDominated(r, c) && !board[r][c]"
+            [class.has-piece]="board[r][c]"
+            [class.blocked]="highlightDominated && !board[r][c] && !canPlacePiece(r, c)"
+            (click)="placeOrRemovePiece(r, c)">
+            <span *ngIf="board[r][c]" class="piece">{{ getPieceSymbol(board[r][c]) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,372 @@
+/* Game of Dominance CSS */
+.dominance-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-header {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.game-header h1 {
+  font-size: 2.5em;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.game-header p {
+  font-size: 1.2em;
+  opacity: 0.95;
+}
+
+.size-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.size-controls label {
+  font-weight: 600;
+  color: #333;
+  margin-right: 8px;
+}
+
+.size-controls button {
+  padding: 8px 16px;
+  border: 2px solid #667eea;
+  background: #fff;
+  color: #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.size-controls button:hover {
+  background: #f0f0ff;
+  transform: translateY(-1px);
+}
+
+.size-controls button.active {
+  background: #667eea;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.game-content {
+  display: flex;
+  gap: 32px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  max-width: 1200px;
+}
+
+.left-panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.piece-selector h3,
+.stats-panel h3 {
+  font-size: 1.2em;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.piece-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.piece-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.piece-btn:hover:not(.disabled) {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.piece-btn.selected {
+  background: #667eea;
+  border-color: #5568d3;
+  color: #fff;
+}
+
+.piece-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.piece-symbol {
+  font-size: 2em;
+}
+
+.piece-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.piece-count {
+  font-size: 0.9em;
+  background: rgba(255,255,255,0.3);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.piece-btn.selected .piece-count {
+  background: rgba(255,255,255,0.25);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.18s, border 0.18s;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.toggle-btn.active {
+  background: #667eea;
+  border-color: #5568d3;
+}
+
+.toggle-slider {
+  width: 36px;
+  height: 20px;
+  background: #d1d5db;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.18s;
+}
+
+.toggle-btn.active .toggle-slider {
+  background: #5568d3;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: left 0.18s;
+}
+
+.toggle-btn.active .toggle-slider::after {
+  left: 19px;
+}
+
+.toggle-label {
+  color: #222;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.toggle-btn.active .toggle-label {
+  color: #fff;
+}
+
+.reset-btn {
+  padding: 12px 16px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.stats-panel {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 1em;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 24px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.victory {
+  background: #d4edda;
+  color: #155724;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid #c3e6cb;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1em;
+  animation: pulse 1s infinite;
+}
+
+.victory.optimal {
+  background: #ffd700;
+  color: #1f2937;
+  border-color: #fbbf24;
+  font-size: 1.2em;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.board-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chessboard {
+  display: grid;
+  border: 3px solid #333;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.row {
+  display: contents;
+}
+
+.cell {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.cell.white {
+  background: #f0d9b5;
+}
+
+.cell.black {
+  background: #b58863;
+}
+
+.cell.dominated {
+  background: #fbbf24 !important;
+  opacity: 0.85;
+}
+
+.cell.blocked {
+  cursor: not-allowed;
+  opacity: 0.6;
+  position: relative;
+}
+
+.cell.blocked::after {
+  content: '✕';
+  position: absolute;
+  font-size: 1.5em;
+  color: #ef4444;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.cell.has-piece {
+  background: #667eea !important;
+}
+
+.cell:not(.blocked):not(.has-piece):hover {
+  transform: scale(1.08);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.piece {
+  font-size: 2.2em;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
