@@ -1,8 +1,8 @@
 <div class="mode-toggle">
-  <label>
-    <input type="checkbox" [(ngModel)]="highlightPath" />
-    Highlight Path
-  </label>
+  <button class="toggle-btn" [class.active]="highlightPath" (click)="highlightPath = !highlightPath">
+    <span class="toggle-slider"></span>
+    <span class="toggle-label">Highlight Path</span>
+  </button>
 </div>
 <div class="chessboard">
   <div *ngFor="let row of board; let rowIdx = index" class="row">
@@ -21,9 +21,9 @@
   </div>
 </div>
 <div class="status">
-  Queens placed: {{ queensPlaced }} / 8
+  Queens placed: {{ queensPlaced }} / {{ requiredPieces }}
   <button (click)="resetBoard()">Reset</button>
 </div>
 <div *ngIf="isSolved" class="success">
-  🎉 Puzzle solved! All 8 queens placed correctly.
+  🎉 Puzzle solved! All {{ requiredPieces }} queens placed correctly.
 </div>

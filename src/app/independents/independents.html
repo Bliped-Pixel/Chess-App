@@ -1,32 +1,31 @@
 <div class="independents-container">
   <div class="independents-card">
     <div class="switcher">
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="queens" /> Queens
-      </label>
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="bishops" /> Bishops
-      </label>
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="knights" /> Knights
-      </label>
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="rooks" /> Rooks
-      </label>
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="kings" /> Kings
-      </label>
-      <label>
-        <input type="radio" name="puzzleType" [(ngModel)]="selected" value="pawns" /> Pawns
-      </label>
+      <div class="mode-selector">
+        <button *ngFor="let m of modes" class="mode-btn" [class.active]="selected===m.key" (click)="selected = m.key">
+          <div class="icon">{{ getSymbol(m.key) }}</div>
+          <div class="mode-label">{{ m.label }}</div>
+        </button>
+      </div>
     </div>
     <div class="puzzle-content">
-  <app-eight-queens *ngIf="selected === 'queens'"></app-eight-queens>
-  <app-bishops *ngIf="selected === 'bishops'"></app-bishops>
-  <app-knights *ngIf="selected === 'knights'"></app-knights>
-  <app-rooks *ngIf="selected === 'rooks'"></app-rooks>
-  <app-kings *ngIf="selected === 'kings'"></app-kings>
-  <app-pawns *ngIf="selected === 'pawns'"></app-pawns>
+      <div class="mode-and-size-row">
+        <div class="puzzle-board">
+          <app-eight-queens *ngIf="selected === 'queens'" [size]="size"></app-eight-queens>
+          <app-bishops *ngIf="selected === 'bishops'" [size]="size"></app-bishops>
+          <app-knights *ngIf="selected === 'knights'" [size]="size"></app-knights>
+          <app-rooks *ngIf="selected === 'rooks'" [size]="size"></app-rooks>
+          <app-kings *ngIf="selected === 'kings'" [size]="size"></app-kings>
+          <app-pawns *ngIf="selected === 'pawns'" [size]="size"></app-pawns>
+          <app-all-pieces *ngIf="selected === 'all'"></app-all-pieces>
+        </div>
+        <div *ngIf="selected !== 'all'" class="size-control size-control-right">
+          <label>Board size</label>
+          <div class="sizes">
+            <button *ngFor="let s of availableSizes" class="size-btn" [class.active]="size===s" (click)="setSize(s)">{{s}}×{{s}}</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

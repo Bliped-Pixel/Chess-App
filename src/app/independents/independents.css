@@ -1,3 +1,52 @@
+.size-control-right {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 140px;
+  padding-left: 12px;
+  background: #23272f;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+.size-control-right label {
+  font-size: 1.13em;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #3b82f6;
+  letter-spacing: 0.5px;
+}
+.size-control-right .sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.size-btn {
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 1.08em;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.08);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.size-btn:hover {
+  background: #e0e7ff;
+  color: #2563eb;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.18);
+}
+.size-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.22);
+  outline: 2px solid #2563eb;
+}
 .independents-container {
   display: flex;
   justify-content: center;
@@ -9,24 +58,51 @@
   color: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  width: 400px;
-  min-height: 480px;
-  padding: 32px 24px;
+  width: 820px; /* wider to comfortably hold board + controls */
+  min-height: 560px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.switcher {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 24px;
-}
-.switcher label {
-  font-size: 1.1em;
-  cursor: pointer;
-}
+.switcher{width:100%;display:flex;justify-content:center;margin-bottom:18px}
+.mode-selector{display:flex;gap:12px;align-items:center}
+.mode-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 12px;border-radius:10px;background:#fff;color:#111;border:1px solid #ccc;min-width:64px;cursor:pointer}
+.mode-btn .icon{font-size:1.6em}
+.mode-btn .mode-label{font-size:0.85em;margin-top:6px;color:#222}
+.mode-btn.active{outline:3px solid #3b82f6;box-shadow:0 3px 8px rgba(59,130,246,0.12)}
 .puzzle-content {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.mode-and-size-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+}
+.puzzle-board {
+  flex: 0 0 auto;
+}
+.size-control-right {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 0;
+  margin-top: 0;
+  min-width: 120px;
+  padding-left: 8px;
+}
+.size-control-right label {
+  font-size: 1.1em;
+  margin-bottom: 12px;
+}
+.size-control-right .sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

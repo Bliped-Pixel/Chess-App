@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,41 +9,46 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './bishops.html',
   styleUrls: ['./bishops.css']
 })
-export class Bishops {
-  board: number[][] = Array.from({ length: 8 }, () => Array(8).fill(0));
+export class Bishops implements OnChanges {
+  @Input() size = 8;
+  board: number[][] = Array.from({ length: this.size }, () => Array(this.size).fill(0));
   bishopsPlaced = 0;
   highlightPath = false;
 
   get threatenedSquares(): boolean[][] {
-    const threatened = Array.from({ length: 8 }, () => Array(8).fill(false));
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    const threatened = Array.from({ length: this.size }, () => Array(this.size).fill(false));
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
         if (this.board[row][col] === 1) {
-          for (let i = -7; i <= 7; i++) {
-            if (row + i >= 0 && row + i < 8 && col + i >= 0 && col + i < 8) {
+          for (let i = -(this.size-1); i <= (this.size-1); i++) {
+            if (row + i >= 0 && row + i < this.size && col + i >= 0 && col + i < this.size) {
               threatened[row + i][col + i] = true;
             }
-            if (row + i >= 0 && row + i < 8 && col - i >= 0 && col - i < 8) {
+            if (row + i >= 0 && row + i < this.size && col - i >= 0 && col - i < this.size) {
               threatened[row + i][col - i] = true;
             }
           }
         }
       }
     }
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
         if (this.board[row][col] === 1) threatened[row][col] = false;
       }
     }
     return threatened;
   }
 
+  get requiredPieces(): number {
+    return this.size * 2 - 2;
+  }
+
   get isSolved(): boolean {
-    return this.bishopsPlaced === 14;
+    return this.bishopsPlaced === this.requiredPieces;
   }
 
   resetBoard(): void {
-    this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
+    this.board = Array.from({ length: this.size }, () => Array(this.size).fill(0));
     this.bishopsPlaced = 0;
   }
 
@@ -58,14 +63,16 @@ export class Bishops {
   }
 
   canPlace(row: number, col: number): boolean {
-    for (let i = -7; i <= 7; i++) {
+    for (let i = -(this.size-1); i <= (this.size-1); i++) {
       if (
-        row + i >= 0 && row + i < 8 && col + i >= 0 && col + i < 8 && this.board[row + i][col + i] === 1
+        row + i >= 0 && row + i < this.size && col + i >= 0 && col + i < this.size && this.board[row + i][col + i] === 1
       ) return false;
       if (
-        row + i >= 0 && row + i < 8 && col - i >= 0 && col - i < 8 && this.board[row + i][col - i] === 1
+        row + i >= 0 && row + i < this.size && col - i >= 0 && col - i < this.size && this.board[row + i][col - i] === 1
       ) return false;
     }
     return true;
   }
+
+  ngOnChanges(changes: SimpleChanges): void { if (changes['size']) this.resetBoard(); }
 }

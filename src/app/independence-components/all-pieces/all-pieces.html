@@ -1,0 +1,43 @@
+<div class="allpieces-container">
+  <div class="left-col">
+    <div class="piece-selector-vertical">
+      <label class="selector-title">Pieces</label>
+      <div class="piece-list">
+        <button *ngFor="let p of pieces" class="piece-btn-vertical" [class.selected]="selected===p" [class.disabled]="getPlaced(p) >= getRequired(p)"
+          (click)="selected = p" [attr.aria-pressed]="selected===p">
+          <span class="sym">{{ getSymbol(p) }}</span>
+          <span class="label">{{ p }}</span>
+          <span class="badge">{{ getPlaced(p) }} / {{ getRequired(p) }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="controls-vertical">
+      <button class="toggle-btn" [class.active]="highlightPath" (click)="highlightPath = !highlightPath">
+        <span class="toggle-slider"></span>
+        <span class="toggle-label">Highlight threats</span>
+      </button>
+      <button (click)="resetBoard()">Reset</button>
+    </div>
+    <div class="status-vertical">
+      <div *ngFor="let p of pieces">{{p}}: {{ getPlaced(p) }} / {{ getRequired(p) }}</div>
+      <div *ngIf="isSolved" class="success">🎉 All pieces placed — you win!</div>
+    </div>
+  </div>
+  <div class="right-col">
+    <div class="chessboard-and-controls">
+      <div class="chessboard">
+  <div *ngFor="let row of board; let r = index" class="row">
+    <div *ngFor="let cell of row; let c = index"
+      class="cell"
+      [class.white]="(r + c) % 2 === 0"
+      [class.black]="(r + c) % 2 === 1"
+      [class.threatened]="highlightPath && threatenedSquares[r][c]"
+      (click)="placeOrRemove(r,c)">
+  <span class="piece" [class.highlighted]="highlightPath && threatenedSquares[r][c]" *ngIf="cell">{{ getSymbol(cell) }}</span>
+  <span *ngIf="highlightPath && threatenedSquares[r][c] && !cell" class="dot"></span>
+    </div>
+  </div>
+</div>
+  </div>
+      </div>
+    </div>

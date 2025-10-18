@@ -1,0 +1,10 @@
+-pawn piece
+-Team independence
+	- 16 piece should be in the board, but no piece should cut each other
+-board size
+
+-Game of Dominance
+	- all piece + Team Dominance
+
+- Add description of the game 
+- Add light and dark colours even in highlight or add a dot
