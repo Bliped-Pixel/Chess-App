@@ -37,21 +37,47 @@
     </div>
 
     <div class="board-container">
-      <div class="chessboard" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
-        <div *ngFor="let row of board; let r = index" class="row">
-          <div *ngFor="let cell of row; let c = index"
-               class="cell"
-               [class.white]="(r + c) % 2 === 0"
-               [class.black]="(r + c) % 2 === 1"
-               [class.has-piece]="cell === 1"
-               [class.has-invalid-piece]="cell === 2"
-               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell === 0"
-               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell === 0"
-               (click)="placeQueen(r, c)">
-            <span *ngIf="cell === 1" class="piece">♛</span>
-            <span *ngIf="cell === 2" class="piece invalid-piece">♛</span>
+      <div class="board-with-ledger">
+        <div class="corner top-left"></div>
+        <div class="coord-row top" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board[0]; let c = index"
+               [class.white]="(0 + c) % 2 === 0" [class.black]="(0 + c) % 2 === 1">{{ fileLabel(c) }}</div>
+        </div>
+        <div class="corner top-right"></div>
+
+        <div class="coord-col left" [style.grid-template-rows]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board; let r = index"
+               [class.white]="(r + 0) % 2 === 0" [class.black]="(r + 0) % 2 === 1">{{ rankLabel(r) }}</div>
+        </div>
+
+        <div class="chessboard" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div *ngFor="let row of board; let r = index" class="row">
+            <div *ngFor="let cell of row; let c = index"
+                 class="cell"
+                 [class.white]="(r + c) % 2 === 0"
+                 [class.black]="(r + c) % 2 === 1"
+                 [class.has-piece]="cell === 1"
+                 [class.has-invalid-piece]="cell === 2"
+                 [class.dominated]="highlightPath && threatenedSquares[r][c] && cell === 0"
+                 [class.blocked]="highlightPath && threatenedSquares[r][c] && cell === 0"
+                 (click)="placeQueen(r, c)">
+              <span *ngIf="cell === 1" class="piece">♛</span>
+              <span *ngIf="cell === 2" class="piece invalid-piece">♛</span>
+            </div>
           </div>
         </div>
+
+        <div class="coord-col right" [style.grid-template-rows]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board; let r = index"
+               [class.white]="(r + (size - 1)) % 2 === 0" [class.black]="(r + (size - 1)) % 2 === 1">{{ rankLabel(r) }}</div>
+        </div>
+
+        <div class="corner bottom-left"></div>
+        <div class="coord-row bottom" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board[0]; let c = index"
+               [class.white]="((size - 1) + c) % 2 === 0" [class.black]="((size - 1) + c) % 2 === 1">{{ fileLabel(c) }}</div>
+        </div>
+        <div class="corner bottom-right"></div>
       </div>
     </div>
   </div>

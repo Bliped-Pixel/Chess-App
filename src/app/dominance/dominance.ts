@@ -27,6 +27,9 @@ export class Dominance {
     { type: 'king', symbol: '♔' },
     { type: 'pawn', symbol: '♙' }
   ];
+
+  fileLabel(index: number): string { return String.fromCharCode(97 + index).toUpperCase(); }
+  rankLabel(row: number): number { return this.size - row; }
   
   pieceCounts: Record<string, number> = {
     queen: 0,

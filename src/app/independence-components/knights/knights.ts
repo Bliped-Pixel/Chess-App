@@ -16,6 +16,9 @@ export class Knights implements OnChanges {
   validKnightsPlaced = 0;
   highlightPath = false;
 
+  fileLabel(index: number): string { return String.fromCharCode(97 + index).toUpperCase(); }
+  rankLabel(row: number): number { return this.size - row; }
+
   get threatenedSquares(): boolean[][] {
     const threatened = Array.from({ length: this.size }, () => Array(this.size).fill(false));
     const moves = [

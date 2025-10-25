@@ -53,6 +53,9 @@ export class AllPieces {
   selected: Piece = 'pawn';
   highlightPath = true;
 
+  fileLabel(index: number): string { return String.fromCharCode(97 + index).toUpperCase(); }
+  rankLabel(row: number): number { return 8 - row; }
+
   pieceSymbols: Record<Piece, string> = {
     pawn: '\u2659',
     bishop: '\u2657',

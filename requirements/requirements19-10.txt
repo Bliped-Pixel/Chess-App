@@ -6,12 +6,7 @@ UI
 - Add Game Description
 - Place all the user messages and success messsage on place top
 - Add Corrdinates to the board
-   -Independence
-	- Queen: Arrange 8 Queens so that no two Queens meet each other.
-	- Team: Team: Arrange all the 16 pieces so that no two pieces meet each other.  
-   -Dominance
-	- Arrange 5 Queens so that all 64 squares are controlled. The pieces can meet each other.
-	- Team: Arrange all the 8 powers so that all 64 squares are controlled.  The pieces can meet each other.
+   
 Functionality
 ===================================
 - fix the bug with Pawn
