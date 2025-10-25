@@ -1,0 +1,19 @@
+UI
+===============================
+- change chess Piece font to LiChess font
+- change highlight pattern match the chess board pattern
+- When I place a piece in the path of another piece it should allow me place it but I should be marked in red.
+- Add Game Description
+- Place all the user messages and success messsage on place top
+- Add Corrdinates to the board
+   -Independence
+	- Queen: Arrange 8 Queens so that no two Queens meet each other.
+	- Team: Team: Arrange all the 16 pieces so that no two pieces meet each other.  
+   -Dominance
+	- Arrange 5 Queens so that all 64 squares are controlled. The pieces can meet each other.
+	- Team: Arrange all the 8 powers so that all 64 squares are controlled.  The pieces can meet each other.
+Functionality
+===================================
+- fix the bug with Pawn
+- two piece can meet each other in game of dominance 
+- Add new game mode corrdinates game  - Refer LiChess (Indentify the provied game Coordinates)

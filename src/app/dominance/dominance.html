@@ -1,7 +1,7 @@
 <div class="dominance-container">
   <div class="game-header">
     <h1>Game of Dominance</h1>
-    <p>Use the minimum number of pieces to dominate all squares on the board!</p>
+    <p>Place the exact number of pieces to control all squares on the board!</p>
   </div>
 
   <div class="size-controls">
@@ -58,10 +58,10 @@
       </div>
 
       <div *ngIf="hasWon && isOptimal" class="victory optimal">
-        🎉 Perfect! Optimal solution achieved!
+        🎉 Perfect! Puzzle solved with all squares controlled!
       </div>
       <div *ngIf="hasWon && !isOptimal" class="victory">
-        ✓ Board dominated! Try using fewer pieces.
+        ✓ All squares controlled! But check your piece count.
       </div>
     </div>
 

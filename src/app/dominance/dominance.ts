@@ -37,7 +37,7 @@ export class Dominance {
     pawn: 0
   };
   
-  // Required pieces for optimal solution: [4x4, 5x5, 6x6, 7x7, 8x8]
+  // Exact number of pieces required for each board size: [4x4, 5x5, 6x6, 7x7, 8x8]
   private requiredPiecesData: Record<string, number[]> = {
     rook: [4, 5, 6, 7, 8],
     bishop: [4, 5, 6, 7, 8],
@@ -89,23 +89,9 @@ export class Dominance {
   }
   
   canPlacePiece(row: number, col: number): boolean {
-    // Can't place if square already has a piece
-    if (this.board[row][col]) return false;
-    
-    // Can't place if square is dominated by another piece
-    const squareKey = `${row},${col}`;
-    for (let r = 0; r < this.size; r++) {
-      for (let c = 0; c < this.size; c++) {
-        if (this.board[r][c] && (r !== row || c !== col)) {
-          const attacks = this.getAttackedSquares(r, c, this.board[r][c]);
-          if (attacks.includes(squareKey)) {
-            return false; // Square is dominated
-          }
-        }
-      }
-    }
-    
-    return true;
+    // Can place if square is empty and we haven't exceeded the piece limit
+    return !this.board[row][col] && 
+           this.pieceCounts[this.selectedPiece] < this.getRequiredPieces(this.selectedPiece);
   }
   
   placeOrRemovePiece(row: number, col: number): void {
@@ -170,12 +156,8 @@ export class Dominance {
   get isOptimal(): boolean {
     if (!this.hasWon) return false;
     
-    // Check if using only one piece type and if it matches the required count
-    const nonZeroCounts = Object.entries(this.pieceCounts).filter(([_, count]) => count > 0);
-    if (nonZeroCounts.length !== 1) return false;
-    
-    const [pieceType, count] = nonZeroCounts[0];
-    return count === this.getRequiredPieces(pieceType);
+    // Check if the selected piece type has the correct number of pieces placed
+    return this.pieceCounts[this.selectedPiece] === this.getRequiredPieces(this.selectedPiece);
   }
   
   getRookAttacks(row: number, col: number): string[] {

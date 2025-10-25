@@ -1,29 +1,47 @@
-<div class="mode-toggle">
-  <button class="toggle-btn" [class.active]="highlightPath" (click)="highlightPath = !highlightPath">
-    <span class="toggle-slider"></span>
-    <span class="toggle-label">Highlight Path</span>
-  </button>
-</div>
-<div class="chessboard">
-  <div *ngFor="let row of board; let rowIdx = index" class="row">
-    <div
-      *ngFor="let cell of row; let colIdx = index"
-      class="cell"
-      [class.white]="(rowIdx + colIdx) % 2 === 0"
-      [class.black]="(rowIdx + colIdx) % 2 === 1"
-      [class.pawn]="cell === 1"
-      [class.threatened]="highlightPath && threatenedSquares[rowIdx][colIdx]"
-      (click)="placePawn(rowIdx, colIdx)"
-    >
-  <span *ngIf="cell === 1">&#9817;</span>
-  <span *ngIf="highlightPath && threatenedSquares[rowIdx][colIdx] && cell !== 1" class="threat-dot"></span>
+<div class="dominance-container">
+  <div class="game-header">
+    <h1>Pawns Independence</h1>
+    <p>Place pawns so that none attack each other.</p>
+  </div>
+
+  <div class="game-content">
+    <div class="left-panel">
+      <div class="controls">
+        <button class="toggle-btn" [class.active]="highlightPath" (click)="highlightPath = !highlightPath">
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Show Highlights</span>
+        </button>
+        <button class="reset-btn" (click)="resetBoard()">Reset Board</button>
+      </div>
+
+      <div class="stats-panel">
+        <h3>Placement Stats</h3>
+        <div class="stat-item">
+          <span class="stat-label">Pawns placed:</span>
+          <span class="stat-value">{{ pawnsPlaced }} / {{ requiredPieces }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="isSolved" class="victory optimal">
+        🎉 Perfect! All {{ requiredPieces }} pawns placed correctly.
+      </div>
+    </div>
+
+    <div class="board-container">
+      <div class="chessboard" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+        <div *ngFor="let row of board; let r = index" class="row">
+          <div *ngFor="let cell of row; let c = index"
+               class="cell"
+               [class.white]="(r + c) % 2 === 0"
+               [class.black]="(r + c) % 2 === 1"
+               [class.has-piece]="cell === 1"
+               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell !== 1"
+               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell !== 1"
+               (click)="placePawn(r, c)">
+            <span *ngIf="cell === 1" class="piece">&#9817;</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<div class="status">
-  Pawns placed: {{ pawnsPlaced }} / {{ requiredPieces }}
-  <button (click)="resetBoard()">Reset</button>
-</div>
-<div *ngIf="isSolved" class="success">
-  🎉 Puzzle solved! All {{ requiredPieces }} pawns placed correctly.
 </div>
