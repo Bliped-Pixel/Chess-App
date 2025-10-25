@@ -14,6 +14,10 @@ export const routes: Routes = [
         loadComponent: () => import('./dominance/dominance').then(m => m.Dominance)
     },
     {
+        path: 'coordinates',
+        loadComponent: () => import('./coordinates/coordinates').then(m => m.Coordinates)
+    },
+    {
         path: '',
         redirectTo: 'puzzles',
         pathMatch: 'full'

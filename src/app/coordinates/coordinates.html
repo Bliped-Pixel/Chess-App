@@ -1,0 +1,72 @@
+<div class="dominance-container">
+  <div class="game-header">
+    <h1>Coordinates Trainer</h1>
+    <p>Identify the shown coordinate by clicking the correct square on the board. Referencing LiChess style.</p>
+    <div class="message-bar">
+      <div *ngIf="!running && (score > 0 || attempts > 0)" class="victory">
+        Session over — Score: {{ score }} / {{ attempts }} ({{ accuracy }}%)
+      </div>
+    </div>
+  </div>
+
+  <div class="game-content">
+    <div class="left-panel">
+      <div class="controls">
+        <button class="reset-btn" (click)="start()" [disabled]="running">Start 60s</button>
+        <button class="reset-btn" (click)="stop()" [disabled]="!running">Stop</button>
+        <button class="reset-btn" (click)="reset()">Reset</button>
+      </div>
+
+      <div class="stats-panel">
+        <h3>Stats</h3>
+        <div class="stat-item"><span class="stat-label">Time:</span> <span class="stat-value">{{ timeRemaining }}s</span></div>
+        <div class="stat-item"><span class="stat-label">Score:</span> <span class="stat-value">{{ score }}</span></div>
+        <div class="stat-item"><span class="stat-label">Attempts:</span> <span class="stat-value">{{ attempts }}</span></div>
+        <div class="stat-item"><span class="stat-label">Accuracy:</span> <span class="stat-value">{{ accuracy }}%</span></div>
+      </div>
+    </div>
+
+    <div class="board-container">
+      <div class="target-display" [class.idle]="!running">Target: <span class="target">{{ target }}</span></div>
+      <div class="board-with-ledger">
+        <div class="corner top-left"></div>
+        <div class="coord-row top" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board[0]; let c = index"
+               [class.white]="(0 + c) % 2 === 0" [class.black]="(0 + c) % 2 === 1">{{ fileLabel(c) }}</div>
+        </div>
+        <div class="corner top-right"></div>
+
+        <div class="coord-col left" [style.grid-template-rows]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board; let r = index"
+               [class.white]="(r + 0) % 2 === 0" [class.black]="(r + 0) % 2 === 1">{{ rankLabel(r) }}</div>
+        </div>
+
+        <div class="chessboard" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div *ngFor="let row of board; let r = index" class="row">
+            <div *ngFor="let _ of row; let c = index"
+                 class="cell"
+                 [class.white]="(r + c) % 2 === 0"
+                 [class.black]="(r + c) % 2 === 1"
+                 [class.hit-correct]="lastClick && lastClick.r === r && lastClick.c === c && lastClick.correct"
+                 [class.hit-wrong]="lastClick && lastClick.r === r && lastClick.c === c && !lastClick.correct"
+                 (click)="clickSquare(r, c)">
+              <span class="cell-coord" *ngIf="false">{{ toCoord(r,c) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="coord-col right" [style.grid-template-rows]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board; let r = index"
+               [class.white]="(r + (size - 1)) % 2 === 0" [class.black]="(r + (size - 1)) % 2 === 1">{{ rankLabel(r) }}</div>
+        </div>
+
+        <div class="corner bottom-left"></div>
+        <div class="coord-row bottom" [style.grid-template-columns]="'repeat(' + size + ', 52px)'">
+          <div class="coord-item" *ngFor="let _ of board[0]; let c = index"
+               [class.white]="((size - 1) + c) % 2 === 0" [class.black]="((size - 1) + c) % 2 === 1">{{ fileLabel(c) }}</div>
+        </div>
+        <div class="corner bottom-right"></div>
+      </div>
+    </div>
+  </div>
+</div>
