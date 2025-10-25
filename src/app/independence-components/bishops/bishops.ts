@@ -13,13 +13,14 @@ export class Bishops implements OnChanges {
   @Input() size = 8;
   board: number[][] = Array.from({ length: this.size }, () => Array(this.size).fill(0));
   bishopsPlaced = 0;
+  validBishopsPlaced = 0;
   highlightPath = false;
 
   get threatenedSquares(): boolean[][] {
     const threatened = Array.from({ length: this.size }, () => Array(this.size).fill(false));
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) {
+        if (this.board[row][col] >= 1) {
           for (let i = -(this.size-1); i <= (this.size-1); i++) {
             if (row + i >= 0 && row + i < this.size && col + i >= 0 && col + i < this.size) {
               threatened[row + i][col + i] = true;
@@ -33,7 +34,7 @@ export class Bishops implements OnChanges {
     }
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) threatened[row][col] = false;
+        if (this.board[row][col] >= 1) threatened[row][col] = false;
       }
     }
     return threatened;
@@ -44,22 +45,69 @@ export class Bishops implements OnChanges {
   }
 
   get isSolved(): boolean {
-    return this.bishopsPlaced === this.requiredPieces;
+    return this.validBishopsPlaced === this.requiredPieces && this.bishopsPlaced === this.requiredPieces;
   }
 
   resetBoard(): void {
     this.board = Array.from({ length: this.size }, () => Array(this.size).fill(0));
     this.bishopsPlaced = 0;
+    this.validBishopsPlaced = 0;
   }
 
   placeBishop(row: number, col: number): void {
-    if (this.board[row][col] === 1) {
+    if (this.board[row][col] >= 1) {
       this.board[row][col] = 0;
       this.bishopsPlaced--;
-    } else if (this.canPlace(row, col)) {
-      this.board[row][col] = 1;
+      this.recalculateValidPieces();
+    } else {
+      if (this.canPlace(row, col)) {
+        this.board[row][col] = 1;
+      } else {
+        this.board[row][col] = 2;
+      }
       this.bishopsPlaced++;
+      this.recalculateValidPieces();
     }
+  }
+
+  recalculateValidPieces(): void {
+    this.validBishopsPlaced = 0;
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
+        if (this.board[row][col] >= 1) {
+          if (this.isPieceValid(row, col)) {
+            this.board[row][col] = 1;
+            this.validBishopsPlaced++;
+          } else {
+            this.board[row][col] = 2;
+          }
+        }
+      }
+    }
+  }
+
+  isPieceValid(row: number, col: number): boolean {
+    const currentValue = this.board[row][col];
+    this.board[row][col] = 0;
+    
+    let valid = true;
+    for (let i = -(this.size-1); i <= (this.size-1); i++) {
+      if (
+        row + i >= 0 && row + i < this.size && col + i >= 0 && col + i < this.size && this.board[row + i][col + i] >= 1
+      ) {
+        valid = false;
+        break;
+      }
+      if (
+        row + i >= 0 && row + i < this.size && col - i >= 0 && col - i < this.size && this.board[row + i][col - i] >= 1
+      ) {
+        valid = false;
+        break;
+      }
+    }
+    
+    this.board[row][col] = currentValue;
+    return valid;
   }
 
   canPlace(row: number, col: number): boolean {

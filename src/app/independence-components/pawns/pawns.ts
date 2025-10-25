@@ -13,13 +13,14 @@ export class Pawns implements OnChanges {
   @Input() size = 8;
   board: number[][] = Array.from({ length: this.size }, () => Array(this.size).fill(0));
   pawnsPlaced = 0;
+  validPawnsPlaced = 0;
   highlightPath = false;
 
   get threatenedSquares(): boolean[][] {
     const threatened = Array.from({ length: this.size }, () => Array(this.size).fill(false));
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) {
+        if (this.board[row][col] >= 1) {
           // Pawns threaten diagonally forward (assuming white pawns)
           if (row > 0 && col > 0) threatened[row - 1][col - 1] = true;
           if (row > 0 && col < this.size - 1) threatened[row - 1][col + 1] = true;
@@ -28,7 +29,7 @@ export class Pawns implements OnChanges {
     }
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) threatened[row][col] = false;
+        if (this.board[row][col] >= 1) threatened[row][col] = false;
       }
     }
     return threatened;
@@ -47,22 +48,58 @@ export class Pawns implements OnChanges {
   }
 
   get isSolved(): boolean {
-    return this.pawnsPlaced === this.requiredPieces;
+    return this.validPawnsPlaced === this.requiredPieces && this.pawnsPlaced === this.requiredPieces;
   }
 
   resetBoard(): void {
     this.board = Array.from({ length: this.size }, () => Array(this.size).fill(0));
     this.pawnsPlaced = 0;
+    this.validPawnsPlaced = 0;
   }
 
   placePawn(row: number, col: number): void {
-    if (this.board[row][col] === 1) {
+    if (this.board[row][col] >= 1) {
       this.board[row][col] = 0;
       this.pawnsPlaced--;
-    } else if (this.canPlace(row, col)) {
-      this.board[row][col] = 1;
+      this.recalculateValidPieces();
+    } else {
+      if (this.canPlace(row, col)) {
+        this.board[row][col] = 1;
+      } else {
+        this.board[row][col] = 2;
+      }
       this.pawnsPlaced++;
+      this.recalculateValidPieces();
     }
+  }
+
+  recalculateValidPieces(): void {
+    this.validPawnsPlaced = 0;
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
+        if (this.board[row][col] >= 1) {
+          if (this.isPieceValid(row, col)) {
+            this.board[row][col] = 1;
+            this.validPawnsPlaced++;
+          } else {
+            this.board[row][col] = 2;
+          }
+        }
+      }
+    }
+  }
+
+  isPieceValid(row: number, col: number): boolean {
+    const currentValue = this.board[row][col];
+    this.board[row][col] = 0;
+    
+    let valid = true;
+    // Pawns threaten diagonally forward (assuming white pawns)
+    if (row > 0 && col > 0 && this.board[row - 1][col - 1] >= 1) valid = false;
+    if (row > 0 && col < this.size - 1 && this.board[row - 1][col + 1] >= 1) valid = false;
+    
+    this.board[row][col] = currentValue;
+    return valid;
   }
 
   canPlace(row: number, col: number): boolean {

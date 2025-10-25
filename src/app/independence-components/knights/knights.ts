@@ -13,6 +13,7 @@ export class Knights implements OnChanges {
   @Input() size = 8;
   board: number[][] = Array.from({ length: this.size }, () => Array(this.size).fill(0));
   knightsPlaced = 0;
+  validKnightsPlaced = 0;
   highlightPath = false;
 
   get threatenedSquares(): boolean[][] {
@@ -23,7 +24,7 @@ export class Knights implements OnChanges {
     ];
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) {
+        if (this.board[row][col] >= 1) {
           for (const [dr, dc] of moves) {
             const nr = row + dr;
             const nc = col + dc;
@@ -36,7 +37,7 @@ export class Knights implements OnChanges {
     }
     for (let row = 0; row < this.size; row++) {
       for (let col = 0; col < this.size; col++) {
-        if (this.board[row][col] === 1) threatened[row][col] = false;
+        if (this.board[row][col] >= 1) threatened[row][col] = false;
       }
     }
     return threatened;
@@ -55,22 +56,67 @@ export class Knights implements OnChanges {
   }
 
   get isSolved(): boolean {
-    return this.knightsPlaced === this.requiredPieces;
+    return this.validKnightsPlaced === this.requiredPieces && this.knightsPlaced === this.requiredPieces;
   }
 
   resetBoard(): void {
     this.board = Array.from({ length: this.size }, () => Array(this.size).fill(0));
     this.knightsPlaced = 0;
+    this.validKnightsPlaced = 0;
   }
 
   placeKnight(row: number, col: number): void {
-    if (this.board[row][col] === 1) {
+    if (this.board[row][col] >= 1) {
       this.board[row][col] = 0;
       this.knightsPlaced--;
-    } else if (this.canPlace(row, col)) {
-      this.board[row][col] = 1;
+      this.recalculateValidPieces();
+    } else {
+      if (this.canPlace(row, col)) {
+        this.board[row][col] = 1;
+      } else {
+        this.board[row][col] = 2;
+      }
       this.knightsPlaced++;
+      this.recalculateValidPieces();
     }
+  }
+
+  recalculateValidPieces(): void {
+    this.validKnightsPlaced = 0;
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
+        if (this.board[row][col] >= 1) {
+          if (this.isPieceValid(row, col)) {
+            this.board[row][col] = 1;
+            this.validKnightsPlaced++;
+          } else {
+            this.board[row][col] = 2;
+          }
+        }
+      }
+    }
+  }
+
+  isPieceValid(row: number, col: number): boolean {
+    const currentValue = this.board[row][col];
+    this.board[row][col] = 0;
+    
+    const moves = [
+      [2, 1], [1, 2], [-1, 2], [-2, 1],
+      [-2, -1], [-1, -2], [1, -2], [2, -1]
+    ];
+    let valid = true;
+    for (const [dr, dc] of moves) {
+      const nr = row + dr;
+      const nc = col + dc;
+      if (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] >= 1) {
+        valid = false;
+        break;
+      }
+    }
+    
+    this.board[row][col] = currentValue;
+    return valid;
   }
 
   canPlace(row: number, col: number): boolean {

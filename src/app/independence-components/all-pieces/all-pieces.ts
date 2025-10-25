@@ -3,6 +3,7 @@ import { CommonModule, NgForOf, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 export type Piece = 'pawn' | 'bishop' | 'knight' | 'rook' | 'queen' | 'king' | '';
+export type BoardCell = { piece: Piece; valid: boolean };
 
 @Component({
   selector: 'app-all-pieces',
@@ -12,7 +13,9 @@ export type Piece = 'pawn' | 'bishop' | 'knight' | 'rook' | 'queen' | 'king' | '
   styleUrls: ['./all-pieces.css']
 })
 export class AllPieces {
-  board: Piece[][] = Array.from({ length: 8 }, () => Array(8).fill(''));
+  board: BoardCell[][] = Array.from({ length: 8 }, () => 
+    Array(8).fill(null).map(() => ({ piece: '', valid: true }))
+  );
 
   // typed list for template iteration (avoids string index errors in template type-checking)
   readonly pieces: Piece[] = ['pawn', 'bishop', 'knight', 'rook', 'queen', 'king'];
@@ -28,6 +31,16 @@ export class AllPieces {
   };
 
   placedCounts: Record<Piece, number> = {
+    pawn: 0,
+    bishop: 0,
+    knight: 0,
+    rook: 0,
+    queen: 0,
+    king: 0,
+    '': 0
+  };
+
+  validCounts: Record<Piece, number> = {
     pawn: 0,
     bishop: 0,
     knight: 0,
@@ -55,6 +68,10 @@ export class AllPieces {
     return this.placedCounts[p] ?? 0;
   }
 
+  getValid(p: Piece): number {
+    return this.validCounts[p] ?? 0;
+  }
+
   getRequired(p: Piece): number {
     return this.requiredCounts[p] ?? 0;
   }
@@ -68,7 +85,7 @@ export class AllPieces {
     const threatened = Array.from({ length: 8 }, () => Array(8).fill(false));
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
-        const p = this.board[r][c];
+        const p = this.board[r][c].piece;
         if (!p) continue;
         const attacks = this.attacksFrom(p, r, c);
         for (const [ar, ac] of attacks) {
@@ -78,7 +95,7 @@ export class AllPieces {
     }
     // Do not mark squares occupied by pieces as threatened (visual choice)
     for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) if (this.board[r][c]) threatened[r][c] = false;
+      for (let c = 0; c < 8; c++) if (this.board[r][c].piece) threatened[r][c] = false;
     }
     return threatened;
   }
@@ -120,7 +137,7 @@ export class AllPieces {
       let nc = col + dc;
       while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
         out.push([nr, nc]);
-        if (this.board[nr][nc]) break; // blocked by any piece
+        if (this.board[nr][nc].piece) break; // blocked by any piece
         nr += dr; nc += dc;
       }
     }
@@ -128,43 +145,85 @@ export class AllPieces {
   }
 
   canPlace(row: number, col: number, piece: Piece): boolean {
-    if (this.board[row][col]) return false; // occupied
+    if (this.board[row][col].piece) return false; // occupied
     // If square is threatened by existing pieces -> cannot place
-  const threatened = this.threatenedSquares;
-  if (threatened[row][col]) return false;
+    const threatened = this.threatenedSquares;
+    if (threatened[row][col]) return false;
     // If placing this piece would attack any existing piece -> cannot place
     const attacks = this.attacksFrom(piece, row, col);
     for (const [ar, ac] of attacks) {
       if (ar >= 0 && ar < 8 && ac >= 0 && ac < 8) {
-        if (this.board[ar][ac]) return false;
+        if (this.board[ar][ac].piece) return false;
       }
     }
-    // Check count limit
-    if (this.placedCounts[piece] >= this.requiredCounts[piece]) return false;
     return true;
   }
 
   placeOrRemove(row: number, col: number): void {
-    const existing = this.board[row][col];
+    const existing = this.board[row][col].piece;
     if (existing) {
-      this.board[row][col] = '';
+      this.board[row][col] = { piece: '', valid: true };
       this.placedCounts[existing]--;
+      this.recalculateValidPieces();
       return;
     }
-    if (this.canPlace(row, col, this.selected)) {
-      this.board[row][col] = this.selected;
-      this.placedCounts[this.selected]++;
+    // Allow placement anywhere
+    this.board[row][col] = { piece: this.selected, valid: this.canPlace(row, col, this.selected) };
+    this.placedCounts[this.selected]++;
+    this.recalculateValidPieces();
+  }
+
+  recalculateValidPieces(): void {
+    // Reset valid counts
+    for (const k of Object.keys(this.validCounts) as Piece[]) {
+      this.validCounts[k] = 0;
+    }
+    
+    // Recalculate validity for all pieces
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const cell = this.board[r][c];
+        if (cell.piece) {
+          const isValid = this.isPieceValid(r, c);
+          cell.valid = isValid;
+          if (isValid) {
+            this.validCounts[cell.piece]++;
+          }
+        }
+      }
     }
   }
 
+  isPieceValid(row: number, col: number): boolean {
+    const cell = this.board[row][col];
+    const currentPiece = cell.piece;
+    if (!currentPiece) return true;
+    
+    // Temporarily remove piece
+    this.board[row][col] = { piece: '', valid: true };
+    
+    const valid = this.canPlace(row, col, currentPiece);
+    
+    // Restore piece
+    this.board[row][col] = { piece: currentPiece, valid: cell.valid };
+    
+    return valid;
+  }
+
   resetBoard(): void {
-    this.board = Array.from({ length: 8 }, () => Array(8).fill(''));
-    for (const k of Object.keys(this.placedCounts) as Piece[]) this.placedCounts[k] = 0;
+    this.board = Array.from({ length: 8 }, () => 
+      Array(8).fill(null).map(() => ({ piece: '', valid: true }))
+    );
+    for (const k of Object.keys(this.placedCounts) as Piece[]) {
+      this.placedCounts[k] = 0;
+      this.validCounts[k] = 0;
+    }
   }
 
   get isSolved(): boolean {
     for (const p of ['pawn','bishop','knight','rook','queen','king'] as Piece[]) {
       if (this.placedCounts[p] !== this.requiredCounts[p]) return false;
+      if (this.validCounts[p] !== this.requiredCounts[p]) return false;
     }
     return true;
   }

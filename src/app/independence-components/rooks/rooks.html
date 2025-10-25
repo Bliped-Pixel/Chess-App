@@ -20,6 +20,10 @@
           <span class="stat-label">Rooks placed:</span>
           <span class="stat-value">{{ rooksPlaced }} / {{ requiredPieces }}</span>
         </div>
+        <div class="stat-item">
+          <span class="stat-label">Valid placements:</span>
+          <span class="stat-value" [style.color]="validRooksPlaced === requiredPieces ? '#10b981' : '#ef4444'">{{ validRooksPlaced }} / {{ requiredPieces }}</span>
+        </div>
       </div>
 
       <div *ngIf="isSolved" class="victory optimal">
@@ -35,10 +39,12 @@
                [class.white]="(r + c) % 2 === 0"
                [class.black]="(r + c) % 2 === 1"
                [class.has-piece]="cell === 1"
-               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell !== 1"
-               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell !== 1"
+               [class.has-invalid-piece]="cell === 2"
+               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell === 0"
+               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell === 0"
                (click)="placeRook(r, c)">
             <span *ngIf="cell === 1" class="piece">&#9814;</span>
+            <span *ngIf="cell === 2" class="piece invalid-piece">&#9814;</span>
           </div>
         </div>
       </div>

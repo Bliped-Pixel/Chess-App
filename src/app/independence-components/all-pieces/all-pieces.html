@@ -32,22 +32,28 @@
           <span class="stat-label">{{ p }}:</span>
           <span class="stat-value">{{ getPlaced(p) }} / {{ getRequired(p) }}</span>
         </div>
+        <div class="stat-item" *ngFor="let p of pieces">
+          <span class="stat-label">Valid {{ p }}:</span>
+          <span class="stat-value" [style.color]="getValid(p) === getRequired(p) ? '#10b981' : '#ef4444'">{{ getValid(p) }} / {{ getRequired(p) }}</span>
+        </div>
         <div *ngIf="isSolved" class="victory optimal">🎉 All pieces placed — you win!</div>
       </div>
     </div>
 
     <div class="board-container">
-  <div class="chessboard" [style.grid-template-columns]="'repeat(8, 52px)'">
+      <div class="chessboard" [style.grid-template-columns]="'repeat(8, 52px)'">
         <div *ngFor="let row of board; let r = index" class="row">
           <div *ngFor="let cell of row; let c = index"
                class="cell"
                [class.white]="(r + c) % 2 === 0"
                [class.black]="(r + c) % 2 === 1"
-               [class.has-piece]="!!cell"
-               [class.dominated]="highlightPath && threatenedSquares[r][c] && !cell"
-               [class.blocked]="highlightPath && threatenedSquares[r][c] && !cell"
+               [class.has-piece]="!!cell.piece && cell.valid"
+               [class.has-invalid-piece]="!!cell.piece && !cell.valid"
+               [class.dominated]="highlightPath && threatenedSquares[r][c] && !cell.piece"
+               [class.blocked]="highlightPath && threatenedSquares[r][c] && !cell.piece"
                (click)="placeOrRemove(r,c)">
-            <span class="piece" *ngIf="cell">{{ getSymbol(cell) }}</span>
+            <span class="piece" *ngIf="cell.piece && cell.valid">{{ getSymbol(cell.piece) }}</span>
+            <span class="piece invalid-piece" *ngIf="cell.piece && !cell.valid">{{ getSymbol(cell.piece) }}</span>
           </div>
         </div>
       </div>

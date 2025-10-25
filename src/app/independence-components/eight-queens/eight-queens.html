@@ -20,6 +20,12 @@
           <span class="stat-label">Queens placed:</span>
           <span class="stat-value">{{ queensPlaced }} / {{ requiredPieces }}</span>
         </div>
+        <div class="stat-item">
+          <span class="stat-label">Valid placements:</span>
+          <span class="stat-value" [style.color]="validQueensPlaced === requiredPieces ? '#10b981' : '#ef4444'">
+            {{ validQueensPlaced }} / {{ requiredPieces }}
+          </span>
+        </div>
       </div>
 
       <div *ngIf="isSolved" class="victory optimal">
@@ -35,10 +41,11 @@
                [class.white]="(r + c) % 2 === 0"
                [class.black]="(r + c) % 2 === 1"
                [class.has-piece]="cell === 1"
-               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell !== 1"
-               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell !== 1"
+               [class.has-invalid-piece]="cell === 2"
+               [class.dominated]="highlightPath && threatenedSquares[r][c] && cell === 0"
+               [class.blocked]="highlightPath && threatenedSquares[r][c] && cell === 0"
                (click)="placeQueen(r, c)">
-            <span *ngIf="cell === 1" class="piece">♛</span>
+            <span *ngIf="cell >= 1" class="piece" [class.invalid-piece]="cell === 2">♛</span>
           </div>
         </div>
       </div>
