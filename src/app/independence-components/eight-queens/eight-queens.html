@@ -45,7 +45,8 @@
                [class.dominated]="highlightPath && threatenedSquares[r][c] && cell === 0"
                [class.blocked]="highlightPath && threatenedSquares[r][c] && cell === 0"
                (click)="placeQueen(r, c)">
-            <span *ngIf="cell >= 1" class="piece" [class.invalid-piece]="cell === 2">♛</span>
+            <span *ngIf="cell === 1" class="piece">♛</span>
+            <span *ngIf="cell === 2" class="piece invalid-piece">♛</span>
           </div>
         </div>
       </div>
