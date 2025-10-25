@@ -2,6 +2,14 @@
   <div class="game-header">
     <h1>Game of Dominance</h1>
     <p>Arrange pieces so that all 64 squares are controlled. The pieces can meet each other.</p>
+    <div class="message-bar">
+      <div *ngIf="hasWon && isOptimal" class="victory optimal">
+        🎉 Perfect! Puzzle solved with all squares controlled!
+      </div>
+      <div *ngIf="hasWon && !isOptimal" class="victory">
+        ✓ All squares controlled! But check your piece count.
+      </div>
+    </div>
   </div>
 
   <div class="size-controls">
@@ -57,12 +65,7 @@
         </div>
       </div>
 
-      <div *ngIf="hasWon && isOptimal" class="victory optimal">
-        🎉 Perfect! Puzzle solved with all squares controlled!
-      </div>
-      <div *ngIf="hasWon && !isOptimal" class="victory">
-        ✓ All squares controlled! But check your piece count.
-      </div>
+      
     </div>
 
     <div class="board-container">

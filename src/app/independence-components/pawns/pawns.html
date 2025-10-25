@@ -2,6 +2,11 @@
   <div class="game-header">
     <h1>Pawns Independence</h1>
     <p>Arrange pawns so that no two pieces meet each other.</p>
+    <div class="message-bar">
+      <div *ngIf="isSolved" class="victory optimal">
+        🎉 Perfect! All {{ requiredPieces }} pawns placed correctly.
+      </div>
+    </div>
   </div>
 
   <div class="game-content">
@@ -26,9 +31,7 @@
         </div>
       </div>
 
-      <div *ngIf="isSolved" class="victory optimal">
-        🎉 Perfect! All {{ requiredPieces }} pawns placed correctly.
-      </div>
+      
     </div>
 
     <div class="board-container">

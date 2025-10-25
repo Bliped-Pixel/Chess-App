@@ -2,6 +2,11 @@
   <div class="game-header">
     <h1>Eight Queens</h1>
     <p>Arrange 8 Queens so that no two Queens meet each other.</p>
+    <div class="message-bar">
+      <div *ngIf="isSolved" class="victory optimal">
+        🎉 Perfect! All {{ requiredPieces }} queens placed correctly.
+      </div>
+    </div>
   </div>
 
   <div class="game-content">
@@ -28,9 +33,7 @@
         </div>
       </div>
 
-      <div *ngIf="isSolved" class="victory optimal">
-        🎉 Perfect! All {{ requiredPieces }} queens placed correctly.
-      </div>
+      
     </div>
 
     <div class="board-container">

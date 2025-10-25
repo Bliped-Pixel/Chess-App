@@ -2,6 +2,9 @@
   <div class="game-header">
     <h1>All Pieces Independence</h1>
     <p>Arrange all the 16 pieces so that no two pieces meet each other.</p>
+    <div class="message-bar">
+      <div *ngIf="isSolved" class="victory optimal">🎉 All pieces placed — you win!</div>
+    </div>
   </div>
 
   <div class="game-content">
@@ -36,7 +39,7 @@
           <span class="stat-label">Valid {{ p }}:</span>
           <span class="stat-value" [style.color]="getValid(p) === getRequired(p) ? '#10b981' : '#ef4444'">{{ getValid(p) }} / {{ getRequired(p) }}</span>
         </div>
-        <div *ngIf="isSolved" class="victory optimal">🎉 All pieces placed — you win!</div>
+        
       </div>
     </div>
 

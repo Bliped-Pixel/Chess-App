@@ -36,6 +36,14 @@
   opacity: 0.95;
 }
 
+.message-bar {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
 .size-controls {
   display: flex;
   gap: 8px;
