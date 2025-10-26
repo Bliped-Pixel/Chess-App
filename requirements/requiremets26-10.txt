@@ -1,0 +1,16 @@
+1. Functionality related to last steps in "Games of Dominance"
+	-fix the bug with game of dominance.
+2. Add Team Dominance, to the code.
+3. Few messages shown, consistency on names, layout, content which is shown to the user, etc.
+4. Use a const file to store pieces and other constant values.
+5. Change the a coordinate letters from Uppercase to Lowercase.
+6. Use the piece images and not the names, next to the pieces.
+7. comment the timer mode on in the game of cordinates.
+8. change the chess font to Li chess(Alpha)
+
+
+New Feature.
+	- Knight's Tour refer:  https://www.brainbashers.com/knight.asp
+		- change the square higlight as per the base board colour.	
+		- The starting postion of the knight can be of any colour.
+
