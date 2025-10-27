@@ -90,6 +90,30 @@
 
 /* Piece button styles moved to shared ui.css */
 
+/* Team/Mode selectors */
+.team-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.team-btn {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #667eea;
+  background: #fff;
+  color: #334155;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.team-btn.active {
+  background: #667eea;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -355,4 +379,8 @@
   font-family: 'Noto Sans', Arial, sans-serif;
   font-weight: 400;
 }
+
+/* Team colors for piece glyphs in Team mode */
+.piece.team-white { color: #ffffff; }
+.piece.team-black { color: #ffea00; }
 
