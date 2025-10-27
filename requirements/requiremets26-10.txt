@@ -4,7 +4,7 @@
 3. Few messages shown, consistency on names, layout, content which is shown to the user, etc.
 4. Use a const file to store pieces and other constant values.
 5. Change the a coordinate letters from Uppercase to Lowercase.
-6. Use the piece images and not the names, next to the pieces.
+6. Use the piece images and not the names, next to the pieces.	
 7. comment the timer mode on in the game of cordinates.
 8. change the chess font to Li chess(Alpha)
 

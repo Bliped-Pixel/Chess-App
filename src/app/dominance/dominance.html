@@ -30,10 +30,10 @@
             *ngFor="let piece of availablePieces" 
             class="piece-btn" 
             [class.selected]="selectedPiece === piece.type"
-            (click)="selectPiece(piece.type)">
+            (click)="selectPiece(piece.type)"
+            [title]="piece.name">
             <span class="piece-symbol">{{ piece.symbol }}</span>
-            <span class="piece-name">{{ piece.type }}</span>
-            <span class="piece-count">{{ pieceCounts[piece.type] }} / {{ getRequiredPieces(piece.type) }}</span>
+            <span class="piece-count">{{ getPieceCount(piece.type) }} / {{ getRequiredPieces(piece.type) }}</span>
           </button>
         </div>
       </div>

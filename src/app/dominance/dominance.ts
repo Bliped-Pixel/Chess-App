@@ -1,6 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { 
+  PieceType, 
+  PieceInfo, 
+  CHESS_PIECES, 
+  ALL_PIECE_TYPES, 
+  getPieceSymbol,
+  fileLabel,
+  rankLabel,
+  DOMINANCE_OPTIMAL_COUNTS
+} from '../shared/chess.constants';
 
 @Component({
   selector: 'app-dominance',
@@ -14,24 +24,21 @@ export class Dominance {
   // Goal: Use the minimum number of pieces to dominate all squares
   
   size = 8;
-  board: string[][] = [];
-  selectedPiece: string = 'queen';
+  board: (PieceType | '')[][] = [];
+  selectedPiece: PieceType = 'queen';
   highlightDominated = true;
   availableSizes = [4, 5, 6, 7, 8];
   
-  availablePieces = [
-    { type: 'queen', symbol: '♕' },
-    { type: 'rook', symbol: '♖' },
-    { type: 'bishop', symbol: '♗' },
-    { type: 'knight', symbol: '♘' },
-    { type: 'king', symbol: '♔' },
-    { type: 'pawn', symbol: '♙' }
-  ];
+  availablePieces: PieceInfo[] = ALL_PIECE_TYPES.map(type => CHESS_PIECES[type]);
 
-  fileLabel(index: number): string { return String.fromCharCode(97 + index).toUpperCase(); }
-  rankLabel(row: number): number { return this.size - row; }
+  fileLabel(index: number): string { return fileLabel(index); }
+  rankLabel(row: number): number { return rankLabel(this.size, row); }
   
-  pieceCounts: Record<string, number> = {
+  getPieceCount(type: PieceType): number {
+    return this.pieceCounts[type];
+  }
+  
+  pieceCounts: Record<PieceType, number> = {
     queen: 0,
     rook: 0,
     bishop: 0,
@@ -40,15 +47,8 @@ export class Dominance {
     pawn: 0
   };
   
-  // Exact number of pieces required for each board size: [4x4, 5x5, 6x6, 7x7, 8x8]
-  private requiredPiecesData: Record<string, number[]> = {
-    rook: [4, 5, 6, 7, 8],
-    bishop: [4, 5, 6, 7, 8],
-    knight: [4, 5, 8, 10, 12],
-    queen: [2, 3, 3, 4, 5],
-    king: [4, 4, 4, 9, 9],
-    pawn: [8, 12, 18, 25, 28]
-  };
+  // Exact number of pieces required for each board size from constants
+  private requiredPiecesData = DOMINANCE_OPTIMAL_COUNTS;
   
   constructor() {
     this.initializeBoard();
@@ -75,7 +75,7 @@ export class Dominance {
     this.initializeBoard();
   }
   
-  getRequiredPieces(type: string): number {
+  getRequiredPieces(type: PieceType): number {
     const sizeIndex = this.availableSizes.indexOf(this.size);
     return this.requiredPiecesData[type]?.[sizeIndex] || 0;
   }
@@ -84,7 +84,7 @@ export class Dominance {
     return Object.values(this.pieceCounts).reduce((sum, count) => sum + count, 0);
   }
   
-  selectPiece(type: string): void {
+  selectPiece(type: PieceType): void {
     if (this.selectedPiece !== type) {
       this.selectedPiece = type;
       this.resetBoard(type);
@@ -92,9 +92,8 @@ export class Dominance {
   }
   
   canPlacePiece(row: number, col: number): boolean {
-    // Can place if square is empty and we haven't exceeded the piece limit
-    return !this.board[row][col] && 
-           this.pieceCounts[this.selectedPiece] < this.getRequiredPieces(this.selectedPiece);
+    // Can place if square is empty (no limit enforced)
+    return !this.board[row][col];
   }
   
   placeOrRemovePiece(row: number, col: number): void {
@@ -104,19 +103,20 @@ export class Dominance {
       this.board[row][col] = '';
       this.pieceCounts[pieceType]--;
     } else if (this.selectedPiece && this.canPlacePiece(row, col)) {
-      // Place piece only if square is not dominated
+      // Place piece (no limit check)
       this.board[row][col] = this.selectedPiece;
       this.pieceCounts[this.selectedPiece]++;
     }
   }
   
-  resetBoard(selectedType: string = this.selectedPiece): void {
+  resetBoard(selectedType: PieceType = this.selectedPiece): void {
     this.initializeBoard();
     this.selectedPiece = selectedType;
   }
   
-  getPieceSymbol(type: string): string {
-    return this.availablePieces.find(p => p.type === type)?.symbol || '';
+  getPieceSymbol(type: PieceType | ''): string {
+    if (!type) return '';
+    return getPieceSymbol(type);
   }
   
   get dominatedSquares(): Set<string> {
@@ -270,7 +270,7 @@ export class Dominance {
     return attacks;
   }
   
-  getAttackedSquares(row: number, col: number, piece: string): string[] {
+  getAttackedSquares(row: number, col: number, piece: PieceType): string[] {
     switch (piece) {
       case 'queen':
         return [...this.getRookAttacks(row, col), ...this.getBishopAttacks(row, col)];

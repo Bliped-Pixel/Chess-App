@@ -13,9 +13,9 @@
         <h3>Select Piece</h3>
         <div class="piece-buttons">
           <button *ngFor="let p of pieces" class="piece-btn" [class.selected]="selected===p" [class.disabled]="getPlaced(p) >= getRequired(p)"
-                  (click)="selected = p" [attr.aria-pressed]="selected===p">
+                  (click)="selected = p" [attr.aria-pressed]="selected===p"
+                  [title]="p.charAt(0).toUpperCase() + p.slice(1)">
             <span class="piece-symbol">{{ getSymbol(p) }}</span>
-            <span class="piece-name">{{ p }}</span>
             <span class="piece-count">{{ getPlaced(p) }} / {{ getRequired(p) }}</span>
           </button>
         </div>

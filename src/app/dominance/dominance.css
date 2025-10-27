@@ -88,61 +88,7 @@
   color: #333;
 }
 
-.piece-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.piece-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: #f3f4f6;
-  border: 2px solid #d1d5db;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.piece-btn:hover:not(.disabled) {
-  background: #e5e7eb;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.piece-btn.selected {
-  background: #667eea;
-  border-color: #5568d3;
-  color: #fff;
-}
-
-.piece-btn.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.piece-symbol {
-  font-size: 2em;
-}
-
-.piece-name {
-  flex: 1;
-  font-weight: 600;
-  font-size: 1.1em;
-}
-
-.piece-count {
-  font-size: 0.9em;
-  background: rgba(255,255,255,0.3);
-  padding: 4px 10px;
-  border-radius: 12px;
-}
-
-.piece-btn.selected .piece-count {
-  background: rgba(255,255,255,0.25);
-}
+/* Piece button styles moved to shared ui.css */
 
 .controls {
   display: flex;

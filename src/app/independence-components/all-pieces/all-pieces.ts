@@ -1,8 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule, NgForOf, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {
+  PieceType,
+  ALL_PIECE_TYPES,
+  getPieceSymbol,
+  getPieceName,
+  fileLabel,
+  rankLabel,
+  INDEPENDENCE_PIECE_COUNTS
+} from '../../shared/chess.constants';
 
-export type Piece = 'pawn' | 'bishop' | 'knight' | 'rook' | 'queen' | 'king' | '';
+export type Piece = PieceType | '';
 export type BoardCell = { piece: Piece; valid: boolean };
 
 @Component({
@@ -18,15 +27,10 @@ export class AllPieces {
   );
 
   // typed list for template iteration (avoids string index errors in template type-checking)
-  readonly pieces: Piece[] = ['pawn', 'bishop', 'knight', 'rook', 'queen', 'king'];
+  readonly pieces: PieceType[] = ALL_PIECE_TYPES;
 
   requiredCounts: Record<Piece, number> = {
-    pawn: 8,
-    bishop: 2,
-    knight: 2,
-    rook: 2,
-    queen: 1,
-    king: 1,
+    ...INDEPENDENCE_PIECE_COUNTS,
     '': 0
   };
 
@@ -53,18 +57,8 @@ export class AllPieces {
   selected: Piece = 'pawn';
   highlightPath = true;
 
-  fileLabel(index: number): string { return String.fromCharCode(97 + index).toUpperCase(); }
-  rankLabel(row: number): number { return 8 - row; }
-
-  pieceSymbols: Record<Piece, string> = {
-    pawn: '\u2659',
-    bishop: '\u2657',
-    knight: '\u2658',
-    rook: '\u2656',
-    queen: '\u2655',
-    king: '\u2654',
-    '': ''
-  };
+  fileLabel(index: number): string { return fileLabel(index); }
+  rankLabel(row: number): number { return rankLabel(8, row); }
 
   // Template-safe accessors to avoid indexing with 'any' in templates
   getPlaced(p: Piece): number {
@@ -79,8 +73,9 @@ export class AllPieces {
     return this.requiredCounts[p] ?? 0;
   }
 
-  getSymbol(p: Piece | ''): string {
-    return this.pieceSymbols[p] ?? '';
+  getSymbol(p: Piece): string {
+    if (!p) return '';
+    return getPieceSymbol(p as PieceType);
   }
 
   // Return squares threatened by the current board
